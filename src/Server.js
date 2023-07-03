@@ -33,6 +33,7 @@ const employeeLeaveSchema = new mongoose.Schema({
   toTimeSlot: String,
   department: String,
   reason: String,
+  leaveStatus: String,
 });
 
 // Create a model from the schema
@@ -50,6 +51,7 @@ app.post('/api/leave', async (req, res) => {
       toTimeSlot,
       department,
       reason,
+      leaveStatus,
     } = req.body;
 
     // Create a new employee leave document
@@ -62,6 +64,7 @@ app.post('/api/leave', async (req, res) => {
       toTimeSlot,
       department,
       reason,
+      leaveStatus: 'Pending',
     });
 
     // Save the employee leave document to the database
@@ -89,22 +92,23 @@ app.get('/api/leave', async (req, res) => {
 
 
 const employeeLoginSchema = new mongoose.Schema({
-  username: String,
+  email: String,
   password: String,
   name: String,
 });
+
 
 const EmployeeLogin = mongoose.model('login', employeeLoginSchema);
 
 app.post('/api/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    console.log('Received username:', username);
+    console.log('Received email:', email);
     console.log('Received password:', password);
 
-    // Find the employee login document with the provided username and password
-    const employee = await EmployeeLogin.findOne({ username, password });
+    // Find the employee login document with the provided email and password
+    const employee = await EmployeeLogin.findOne({ email, password });
 
     console.log('Found employee:', employee);
 
@@ -113,15 +117,16 @@ app.post('/api/login', async (req, res) => {
       res.status(200).json({ name: employee.name });
     } else {
       // If login is invalid, send an error response
-      res.status(401).json({ message: 'Invalid username or password.' });
+      res.status(401).json({ message: 'Invalid email or password.' });
     }
   } catch (error) {
-    console.error(error); // Log the error for debugging purposes
+    console.error(error);
     res.status(500).json({ message: 'Error occurred while validating login.', error: error.message });
   }
 });
 
-app.get('/api/login', async (req, res) => {
+
+app.get('/api/employees', async (req, res) => {
   try {
     // Retrieve all the employee login documents from the database
     const employees = await EmployeeLogin.find();
@@ -129,45 +134,12 @@ app.get('/api/login', async (req, res) => {
     // Send the employee login data in the response
     res.status(200).json(employees);
   } catch (error) {
-    console.error(error); // Log the error for debugging purposes
+    console.error(error);
     res.status(500).json({ message: 'Error occurred while retrieving employee login data.', error: error.message });
   }
 });
 
 
-
-const hrLoginSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  name: String,
-});
-
-const HRLogin = mongoose.model('hrlogin', hrLoginSchema);
-
-app.post('/api/hrlogin', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    console.log('Received username:', username);
-    console.log('Received password:', password);
-
-    // Find the HR login document with the provided username and password
-    const hr = await HRLogin.findOne({ username, password });
-
-    console.log('Found HR:', hr);
-
-    if (hr) {
-      // If login is valid, send the corresponding HR name in the response
-      res.status(200).json({ name: hr.name });
-    } else {
-      // If login is invalid, send an error response
-      res.status(401).json({ message: 'Invalid username or password.' });
-    }
-  } catch (error) {
-    console.error(error); // Log the error for debugging purposes
-    res.status(500).json({ message: 'Error occurred while validating HR login.', error: error.message });
-  }
-});
 
 
 

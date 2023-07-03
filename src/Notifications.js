@@ -1,31 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './Notifications.css';
 
-const NotificationsPanel = () => {
-  // Dummy notifications data
-  const notifications = [
-    {
-      id: 1,
-      message: 'Leave Rejected',
-      status: 'Rejected',
-      date: '2023-06-22',
-      reason: 'Insufficient leave balance',
-    },
-    {
-      id: 2,
-      message: 'Leave Accepted',
-      status: 'Approved',
-      date: '2023-06-21',
-      reason: 'N/A',
-    },
-    {
-      id: 3,
-      message: 'Leave Accepted',
-      status: 'Approved',
-      date: '2023-06-21',
-      reason: 'N/A',
-    },
-  ];
+const NotificationsPanel = ({ loggedInEmployeeId }) => {
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        // Make an API request to fetch the employee leaves data
+        const response = await axios.get(`http://localhost:8000/api/leave`);
+        const notificationsData = response.data;
+
+        // Map the notifications data to the desired format or adjust the code based on the API response structure
+        const mappedNotifications = notificationsData.map((notification) => ({
+          id: notification.id,
+          message: notification.message,
+          date: notification.date,
+        }));
+
+        setNotifications(mappedNotifications);
+      } catch (error) {
+        console.error('Error occurred while fetching notifications:', error);
+      }
+    };
+
+    fetchNotifications();
+  }, [loggedInEmployeeId]);
 
   return (
     <div className="notifications-panel-container">
@@ -35,17 +36,13 @@ const NotificationsPanel = () => {
         <thead>
           <tr>
             <th>Message</th>
-            <th>Reason</th>
             <th>Date</th>
-            {/* <th>Status</th> */}
           </tr>
         </thead>
         <tbody>
           {notifications.map((notification) => (
             <tr key={notification.id}>
               <td>{notification.message}</td>
-              {/* <td>{notification.status}</td> */}
-              <td>{notification.reason}</td>
               <td>{notification.date}</td>
             </tr>
           ))}

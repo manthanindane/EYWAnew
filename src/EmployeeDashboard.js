@@ -105,13 +105,13 @@ const EmployeeDashboard = () => {
 <div className="form-group">
           <label htmlFor="name">Name:</label>
           
-          <textarea
+          <input
             id="reason"
             className="form-control"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
-          ></textarea>
+          ></input>
         </div>
 
           <div className="form-group">
@@ -128,7 +128,6 @@ const EmployeeDashboard = () => {
               <option value="Paternity Leave">Paternity leave</option>
               <option value="Emergency Leave">Emergency leave</option>
               <option value="Sabbatical Leave">Sabbatical leave</option>
-              <option value="Sandwich Leave">Sandwich leave</option>
               <option value="Sick Leave">Sick Leave</option>
               {/* Add more leave type options */}
             </select>

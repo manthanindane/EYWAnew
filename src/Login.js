@@ -2,33 +2,29 @@ import React, { useState } from 'react';
 import './Login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isHRLogin, setIsHRLogin] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Perform login validation
+    // Perform employee login validation
     try {
-      let url = 'http://localhost:8000/api/login';
-      if (isHRLogin) {
-        url = 'http://localhost:8000/api/hrlogin';
-      }
+      const url = 'http://localhost:8000/api/login';
 
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
         const data = await response.json();
         // Login successful
         console.log('Login successful');
-        console.log('User Name:', data.name);
+        console.log('Email:', data.name);
         window.location.href = '/Dashboard';
       } else {
         // Login failed
@@ -39,25 +35,21 @@ const Login = () => {
     }
   };
 
-  const handleToggleLogin = () => {
-    setIsHRLogin((prev) => !prev);
-  };
-
   return (
     <div className='mainlogin'>
       <form className='loginform' onSubmit={handleSubmit}>
-        <h2 className='loginhead'>Login</h2>
+        <h2 className='loginhead'>Employee Login</h2>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
-            Username
+            Email
           </label>
           <input
-            type="text"
+            type="email"
             className="form-control"
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="mb-3">
@@ -73,11 +65,8 @@ const Login = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          {isHRLogin ? 'HR Login' : 'Employee Login'}
+          Employee Login
         </button>
-        <p className='toggle-login' onClick={handleToggleLogin}>
-          {isHRLogin ? 'Switch to Employee Login' : 'Switch to HR Login'}
-        </p>
       </form>
     </div>
   );

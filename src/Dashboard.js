@@ -5,9 +5,7 @@ import HRDashboard from './HRDashboard';
 
 const Dashboard = ({ isHRLogin }) => {
   return (
-    <div className='dashboard'>
-      {isHRLogin ? <EmployeeDashboard  /> : <HRDashboard/>}
-    </div>
+    <EmployeeDashboard/>
   );
 };
 
