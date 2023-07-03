@@ -5,11 +5,13 @@ import axios from 'axios';
 
 
 const EmployeeDashboard = () => {
+  const [name, setName] = useState('');
   const [leaveType, setLeaveType] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [fromTimeSlot, setFromTimeSlot] = useState('');
   const [toTimeSlot, setToTimeSlot] = useState('');
+  const [department, setdepartment] = useState('');
   const [reason, setReason] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
 
@@ -20,12 +22,14 @@ const EmployeeDashboard = () => {
 
     try {
       // Perform leave application submission
-      await axios.post('/api/leave', {
+      await axios.post('http://localhost:8000/api/leave', {
+        name,
         leaveType,
         fromDate,
         toDate,
         fromTimeSlot,
         toTimeSlot,
+        department,
         reason,
       });
       setIsFormVisible(false);
@@ -38,11 +42,13 @@ const EmployeeDashboard = () => {
     // Perform leave application submission logic here
 
     // Reset form fields
+    setName('');
     setLeaveType('');
     setFromDate('');
     setToDate('');
     setFromTimeSlot('');
     setToTimeSlot('');
+    setdepartment('');
     setReason('');
 
     // Hide the form after submission
@@ -95,6 +101,19 @@ const EmployeeDashboard = () => {
 
       {isFormVisible && (
         <form className="leave-form" onSubmit={handleFormSubmit}>
+
+<div className="form-group">
+          <label htmlFor="name">Name:</label>
+          
+          <textarea
+            id="reason"
+            className="form-control"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name"
+          ></textarea>
+        </div>
+
           <div className="form-group">
             <label htmlFor="leaveType">Leave Type:</label>
             <select
@@ -104,16 +123,39 @@ const EmployeeDashboard = () => {
               onChange={(e) => setLeaveType(e.target.value)}
             >
               <option value="">Select Leave Type</option>
-              <option value="casual">Casual Leave</option>
-              <option value="maternity">Maternity leave</option>
-              <option value="paternity">Paternity leave</option>
-              <option value="emergency">Emergency leave</option>
-              <option value="sabbatical">Sabbatical leave</option>
-              <option value="sandwich">Sandwich leave</option>
-              <option value="sick">Sick Leave</option>
+              <option value="Casual Leave">Casual Leave</option>
+              <option value="Maternity Leave">Maternity leave</option>
+              <option value="Paternity Leave">Paternity leave</option>
+              <option value="Emergency Leave">Emergency leave</option>
+              <option value="Sabbatical Leave">Sabbatical leave</option>
+              <option value="Sandwich Leave">Sandwich leave</option>
+              <option value="Sick Leave">Sick Leave</option>
               {/* Add more leave type options */}
             </select>
+
+            </div>
+
+
+            <div className="form-group">
+            <label htmlFor="department">Department:</label>
+            <select
+              id="leaveType"
+              className="form-control"
+              value={department}
+              onChange={(e) => setdepartment(e.target.value)}
+            >
+              <option value="">Select Leave Type</option>
+              <option value="Finance">Finance</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Sales">Sales</option>
+              <option value="Management">Management</option>
+              <option value="Humanresource">Human Resource</option>
+            </select>
           </div>
+
+
+
+
           <div className="form-group">
           <label htmlFor="fromDate">From:</label>
           <input
