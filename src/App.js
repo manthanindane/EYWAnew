@@ -8,31 +8,49 @@ import Notifications from "./Notifications";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import EmployeeRecords from "./EmployeeRecords";
+import { useEffect, useState } from "react";
 // import { Route } from 'react-router-dom';
 
 // import Create from "./Create";
 
 
 function App() {
+
+  const[data, setData] = useState();
+
+// Function to retrieve data from session storage
+const getDataFromSessionStorage = () => {
+  const savedData = sessionStorage.getItem('login');
+  if (savedData) {
+    setData(savedData);
+  }
+};
+
+useEffect(() => {
+  // Retrieve data from session storage when component mounts
+  getDataFromSessionStorage();
+},[]);
+
   return (
     <Router>
-      <Sidebar>
-        <Routes>
-          <Route path="/" element={<Login/>} />
-          <Route path="/Login" element={<Login/>} />
-          <Route path="/Dashboard" element={<Dashboard/>} />
-          <Route path="/Leavehistory" element={<Leavehistory/>} />
-          <Route path="/Calender" element={<Calender/>} />
-          <Route path="/Notifications" element={<Notifications/>} />
-          <Route path="/EmployeeRecords" element={<EmployeeRecords/>} />
-          
-          {/* <Route path="/Create" element={<Create/>} /> */}
-          
-          
+      {data ? (
+        <Sidebar>
+          <Routes>
+            {/* <Route path="/" element={<Login />} /> */}
+            <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/Leavehistory" element={<Leavehistory />} />
+            <Route path="/Calender" element={<Calender />} />
+            <Route path="/Notifications" element={<Notifications />} />
+            <Route path="/EmployeeRecords" element={<EmployeeRecords />} />
 
-          <Route path="*" element={<> not found</>} />
+            <Route path="*" element={<> not found</>} />
+          </Routes>
+        </Sidebar>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Login />} />
         </Routes>
-      </Sidebar>
+      )} 
     </Router>
   );
 }

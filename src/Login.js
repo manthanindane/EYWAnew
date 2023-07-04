@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './Login.css';
+import App from './App';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [login, setLogin] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +21,8 @@ const Login = () => {
         },
         body: JSON.stringify({ email, password }),
       });
+      
+      sessionStorage.setItem('login', login);
 
       if (response.ok) {
         const data = await response.json();
@@ -64,7 +68,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button onClick={()=>setLogin(true)} type="submit" className="btn btn-primary">
           Employee Login
         </button>
       </form>

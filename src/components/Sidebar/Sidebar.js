@@ -34,11 +34,7 @@ const routes = [
     name: "Calender",
     icon: <BsCalendar2 />,
   },
-  {
-    path: "/login",
-    name: "Login",
-    icon: <BiLogIn />,
-  },
+
  
  
     ];

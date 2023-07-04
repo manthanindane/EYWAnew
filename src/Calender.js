@@ -1,13 +1,23 @@
-import React from 'react';
-// import FullCalendarWrapper from './components/FullCalendarWrapper';
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+// Import your custom CSS file for styling
 
-const Calendar = () => {
+function Calender() {
+  const [date, setDate] = useState(new Date());
+
+  const handleDateChange = (date) => {
+    setDate(date);
+  };
+
   return (
-    <div>
-      <h1>Calendar</h1>
-      {/* <FullCalendarWrapper /> */}
+    <div className="container">
+      <h1>Calendar Example</h1>
+      <div className="calendar-container">
+        <Calendar onChange={handleDateChange} value={date} />
+      </div>
     </div>
   );
-};
+}
 
-export default Calendar;
+export default Calender;
