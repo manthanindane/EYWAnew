@@ -1,9 +1,10 @@
 // Install required packages: express, mongoose
-
+//import userId, { setGlobalVariable } from './global.js';
 // const { default: axios } = require('axios');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
 // const EmployeeLeave = require('./models/EmployeeLeave'); // Import the EmployeeLeave model
 // const EmployeeLogin = require('./models/EmployeeLogin');
 
@@ -11,8 +12,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://eywa:12345@cluster1.pfnus6c.mongodb.net/Employee', {
+const mong = mongoose.connect('mongodb+srv://eywa:12345@cluster1.pfnus6c.mongodb.net/Employee', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
@@ -23,9 +25,11 @@ mongoose.connect('mongodb+srv://eywa:12345@cluster1.pfnus6c.mongodb.net/Employee
   });
 
 
+
 // Define a schema for employee leave data
 const employeeLeaveSchema = new mongoose.Schema({
   name: String,
+  empId: String,
   leaveType: String,
   fromDate: Date,
   toDate: Date,
@@ -39,8 +43,14 @@ const employeeLeaveSchema = new mongoose.Schema({
 // Create a model from the schema
 const EmployeeLeave = mongoose.model('leave', employeeLeaveSchema);
 
+app.get('/api', async (req, res) => {
+  res.send('Hello World!');
+})
+
 // Create a route to handle form submission and save data to the database
 app.post('/api/leave', async (req, res) => {
+
+
   try {
     const {
       name,
@@ -77,20 +87,6 @@ app.post('/api/leave', async (req, res) => {
   }
 });
 
-app.get('/api/leave', async (req, res) => {
-  try {
-    // Retrieve all the employee leave documents from the database
-    const employeeLeaves = await EmployeeLeave.find();
-
-    // Send the employee leave data in the response
-    res.status(200).json(employeeLeaves);
-  } catch (error) {
-    console.error(error); // Log the error for debugging purposes
-    res.status(500).json({ message: 'Error occurred while retrieving employee leave data.', error: error.message });
-  }
-});
-
-
 const employeeLoginSchema = new mongoose.Schema({
   email: String,
   password: String,
@@ -109,8 +105,12 @@ app.post('/api/login', async (req, res) => {
 
     // Find the employee login document with the provided email and password
     const employee = await EmployeeLogin.findOne({ email, password });
+    //setGlobalVariable(employee._id);
+
 
     console.log('Found employee:', employee);
+    console.log('ID-',employee._id);
+
 
     if (employee) {
       // If login is valid, send the corresponding employee name in the response
@@ -147,4 +147,3 @@ app.get('/api/employees', async (req, res) => {
 app.listen(8000, () => {
   console.log('Server is running on port 8000');
 });
-

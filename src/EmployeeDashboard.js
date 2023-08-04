@@ -1,28 +1,58 @@
-import React, { useState } from 'react';
-import './EmployeeDashboard.css';
+import React, { useState } from "react";
+import "./EmployeeDashboard.css";
+//import * as mongoose from "mongoose";
 // import CircularProgress from '@material-ui/core/CircularProgress';
-import axios from 'axios';
+import axios from "axios";
+//import mong from './Server.js';
 
+import { createFromHexString  } from 'bson-objectid';
+//const mongoose = require('mongoose');
 
 const EmployeeDashboard = () => {
-  const [name, setName] = useState('');
-  const [leaveType, setLeaveType] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [fromTimeSlot, setFromTimeSlot] = useState('');
-  const [toTimeSlot, setToTimeSlot] = useState('');
-  const [department, setdepartment] = useState('');
-  const [reason, setReason] = useState('');
+  const [name, setName] = useState("");
+  const [emp_id, setEmpId] = useState("");
+  const [leaveType, setLeaveType] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [fromTimeSlot, setFromTimeSlot] = useState("");
+  const [toTimeSlot, setToTimeSlot] = useState("");
+  const [department, setdepartment] = useState("");
+  const [reason, setReason] = useState("");
   const [isFormVisible, setIsFormVisible] = useState(false);
 
   const remainingValue = 3;
 
-  const handleFormSubmit =async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Perform leave application submission
-      await axios.post('http://localhost:8000/api/leave', {
+
+    const objectIdString = '649f2bb22eebb6e0dc40f7e5'; // Replace with your ObjectId string
+    const objectId = new createFromHexString(objectIdString);
+    setEmpId(objectId);
+      
+      /*const collection = mong.connection.collection("logins");
+      collection
+        .findOne({ name: "Yash Chanekar" })
+        .then((document) => {
+          if (document) {
+            const documentId = document._id;
+            setEmpId(documentId);
+            console.log("Document ID:", documentId);
+          } else {
+            console.log("Document not found");
+          }
+          mong.connection.close(); // Close the MongoDB connection
+        })
+        .catch((error) => {
+          console.error("Error finding document:", error);
+          mong.connection.close(); // Close the MongoDB connection in case of an error
+        });*/
+        
+  
+      
+      await axios.post("http://localhost:8000/api/leave", {
+        emp_id,
         name,
         leaveType,
         fromDate,
@@ -37,19 +67,19 @@ const EmployeeDashboard = () => {
       console.error(error);
       // Handle error
     }
-  
 
     // Perform leave application submission logic here
 
     // Reset form fields
-    setName('');
-    setLeaveType('');
-    setFromDate('');
-    setToDate('');
-    setFromTimeSlot('');
-    setToTimeSlot('');
-    setdepartment('');
-    setReason('');
+    setName("");
+    setEmpId("");
+    setLeaveType("");
+    setFromDate("");
+    setToDate("");
+    setFromTimeSlot("");
+    setToTimeSlot("");
+    setdepartment("");
+    setReason("");
 
     // Hide the form after submission
     setIsFormVisible(false);
@@ -97,22 +127,19 @@ const EmployeeDashboard = () => {
       </div>
         <p className='pleave'>Leaves remaining: {remainingValue}</p> */}
 
-      
-
       {isFormVisible && (
         <form className="leave-form" onSubmit={handleFormSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Name:</label>
 
-<div className="form-group">
-          <label htmlFor="name">Name:</label>
-          
-          <input
-            id="reason"
-            className="form-control"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-          ></input>
-        </div>
+            <input
+              id="reason"
+              className="form-control"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+            ></input>
+          </div>
 
           <div className="form-group">
             <label htmlFor="leaveType">Leave Type:</label>
@@ -131,11 +158,9 @@ const EmployeeDashboard = () => {
               <option value="Sick Leave">Sick Leave</option>
               {/* Add more leave type options */}
             </select>
+          </div>
 
-            </div>
-
-
-            <div className="form-group">
+          <div className="form-group">
             <label htmlFor="department">Department:</label>
             <select
               id="leaveType"
@@ -152,100 +177,97 @@ const EmployeeDashboard = () => {
             </select>
           </div>
 
-
-
+          <div className="form-group">
+            <label htmlFor="fromDate">From:</label>
+            <input
+              type="date"
+              id="fromDate"
+              className="form-control"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+            <div className="time-slot-group">
+              <label>
+                <input
+                  type="radio"
+                  value="1sthalf"
+                  checked={fromTimeSlot === "1sthalf"}
+                  onChange={(e) => setFromTimeSlot(e.target.value)}
+                />{" "}
+                1st Half
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="2ndhalf"
+                  checked={fromTimeSlot === "2ndhalf"}
+                  onChange={(e) => setFromTimeSlot(e.target.value)}
+                />{" "}
+                2nd Half
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="full day"
+                  checked={fromTimeSlot === "full day"}
+                  onChange={(e) => setFromTimeSlot(e.target.value)}
+                />{" "}
+                full day
+              </label>
+            </div>
+          </div>
 
           <div className="form-group">
-          <label htmlFor="fromDate">From:</label>
-          <input
-            type="date"
-            id="fromDate"
-            className="form-control"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-          />
-          <div className="time-slot-group">
-            <label>
-              <input
-                type="radio"
-                value="1sthalf"
-                checked={fromTimeSlot === '1sthalf'}
-                onChange={(e) => setFromTimeSlot(e.target.value)}
-              />{' '}
-              1st Half
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="2ndhalf"
-                checked={fromTimeSlot === '2ndhalf'}
-                onChange={(e) => setFromTimeSlot(e.target.value)}
-              />{' '}
-              2nd Half
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="full day"
-                checked={fromTimeSlot === 'full day'}
-                onChange={(e) => setFromTimeSlot(e.target.value)}
-              />{' '}
-              full day
-            </label>
+            <label htmlFor="toDate">To:</label>
+            <input
+              type="date"
+              id="toDate"
+              className="form-control"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+            />
+            <div className="time-slot-group">
+              <label>
+                <input
+                  type="radio"
+                  value="1sthalf"
+                  checked={toTimeSlot === "1sthalf"}
+                  onChange={(e) => setToTimeSlot(e.target.value)}
+                />{" "}
+                1st Half
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="2ndhalf"
+                  checked={toTimeSlot === "2ndhalf"}
+                  onChange={(e) => setToTimeSlot(e.target.value)}
+                />{" "}
+                2nd Half
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="full day"
+                  checked={fromTimeSlot === "full day"}
+                  onChange={(e) => setFromTimeSlot(e.target.value)}
+                />{" "}
+                full day
+              </label>
+            </div>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="toDate">To:</label>
-          <input
-            type="date"
-            id="toDate"
-            className="form-control"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-          />
-          <div className="time-slot-group">
-            <label>
-              <input
-                type="radio"
-                value="1sthalf"
-                checked={toTimeSlot === '1sthalf'}
-                onChange={(e) => setToTimeSlot(e.target.value)}
-              />{' '}
-              1st Half
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="2ndhalf"
-                checked={toTimeSlot === '2ndhalf'}
-                onChange={(e) => setToTimeSlot(e.target.value)}
-              />{' '}
-              2nd Half
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="full day"
-                checked={fromTimeSlot === 'full day'}
-                onChange={(e) => setFromTimeSlot(e.target.value)}
-              />{' '}
-              full day
-            </label>
+          <div className="form-group">
+            <label htmlFor="reason">Reason for Leave:</label>
+            <textarea
+              id="reason"
+              className="form-control"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Enter reason for leave"
+            ></textarea>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="reason">Reason for Leave:</label>
-          <textarea
-            id="reason"
-            className="form-control"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Enter reason for leave"
-          ></textarea>
-        </div>
-        
           {/* Rest of the form fields */}
 
           <button type="submit" className="submit-button">
@@ -256,7 +278,6 @@ const EmployeeDashboard = () => {
             Close
           </button>
         </form>
-        
       )}
       <button className="apply-leave-button" onClick={toggleFormVisibility}>
         Apply Leave
