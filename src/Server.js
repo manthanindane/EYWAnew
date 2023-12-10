@@ -14,7 +14,7 @@ app.use(cors());
 
 
 // Connect to MongoDB
-const mong = mongoose.connect('mongodb+srv://eywa:12345@cluster1.pfnus6c.mongodb.net/Employee', {
+const mong = mongoose.connect('mongodb+srv://eywa:Eywa1234@cluster1.pfnus6c.mongodb.net/Employee', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {

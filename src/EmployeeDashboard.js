@@ -31,24 +31,6 @@ const EmployeeDashboard = () => {
     const objectId = new createFromHexString(objectIdString);
     setEmpId(objectId);
       
-      /*const collection = mong.connection.collection("logins");
-      collection
-        .findOne({ name: "Yash Chanekar" })
-        .then((document) => {
-          if (document) {
-            const documentId = document._id;
-            setEmpId(documentId);
-            console.log("Document ID:", documentId);
-          } else {
-            console.log("Document not found");
-          }
-          mong.connection.close(); // Close the MongoDB connection
-        })
-        .catch((error) => {
-          console.error("Error finding document:", error);
-          mong.connection.close(); // Close the MongoDB connection in case of an error
-        });*/
-        
   
       
       await axios.post("http://localhost:8000/api/leave", {
@@ -91,7 +73,7 @@ const EmployeeDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <p className="someonename">Yash Chanekar</p>
+      <p className="someonename">Rishita Soni</p>
       <h1 className="welcome-heading">WELCOME</h1>
       <div className="dashboardbtn">
         <button className="btndash1">Approved Leave</button>
