@@ -103,7 +103,7 @@ const SideBar = ({ children }) => {
                   exit="hidden"
                   className="logo"
                 >
-                  EYWA Solutions
+                  Soni Solutions
                 </motion.h1>
               )}
             </AnimatePresence>
